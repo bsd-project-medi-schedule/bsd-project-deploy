@@ -65,6 +65,29 @@ services:
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
       - "com.centurylinklabs.watchtower.enable=false"
 
+  users_api:
+    image: byckilie/bsd-project-users
+    container_name: users-api
+    env_file:
+      - ./.env.users
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nats.rule=Host(`users.bychilie.com`)"
+      - "traefik.http.routers.nats.entrypoints=websecure"
+      - "traefik.http.routers.nats.tls=true"
+      - "traefik.http.routers.nats.tls.certresolver=myresolver"
+      - "traefik.http.services.nats.loadbalancer.server.port=7000"
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  email_api:
+    image: byckilie/bsd-project-email
+    container_name: email-api
+    volumes:
+      - ./tokens:/app/tokens
+      - ./client_secret_medi.json:/opt/client_secret.json
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
   watchtower:
     image: containrrr/watchtower:latest
     container_name: watchtower

@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  nats:
+    image: nats:latest
+    container_name: nats-server
+    ports:
+      - "4222:4222"
+      - "8222:8222"   # monitoring
+      - "6222:6222"
+    volumes:
+      - ./nats-server.conf:/etc/nats/nats-server.conf:ro
+    command: >
+      -js
+      -m 8222
+      -c /etc/nats/nats-server.conf
+
+  postgres:
+    image: postgres:17
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local

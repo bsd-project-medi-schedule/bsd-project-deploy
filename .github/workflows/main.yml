@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ssh-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: ssh key
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ vars.HOST }}
+          username: ${{ vars.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            eval "$(ssh-agent -s)"
+            ssh-add ~/.ssh/id_rsa
+            
+            cd ${{ vars.WORKING_DIR }}
+
+            git stash
+            git pull --rebase origin main
+            
+            docker compose up -d

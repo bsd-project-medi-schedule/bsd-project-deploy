@@ -72,11 +72,11 @@ services:
       - ./.env.users
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nats.rule=Host(`users.bychilie.com`)"
-      - "traefik.http.routers.nats.entrypoints=websecure"
-      - "traefik.http.routers.nats.tls=true"
-      - "traefik.http.routers.nats.tls.certresolver=myresolver"
-      - "traefik.http.services.nats.loadbalancer.server.port=7000"
+      - "traefik.http.routers.users_api.rule=Host(`users.bychilie.com`)"
+      - "traefik.http.routers.users_api.entrypoints=websecure"
+      - "traefik.http.routers.users_api.tls=true"
+      - "traefik.http.routers.users_api.tls.certresolver=myresolver"
+      - "traefik.http.services.users_api.loadbalancer.server.port=7000"
       - "com.centurylinklabs.watchtower.enable=true"
 
   email_api:

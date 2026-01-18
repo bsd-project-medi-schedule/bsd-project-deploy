@@ -1,3 +1,5 @@
 schema.sql
 tokens/
 client_secret_medi.json
+.env
+.env.*

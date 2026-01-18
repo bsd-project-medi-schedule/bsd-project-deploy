@@ -20,7 +20,7 @@ services:
       - "traefik.http.routers.nats.entrypoints=websecure"
       - "traefik.http.routers.nats.tls=true"
       - "traefik.http.routers.nats.tls.certresolver=myresolver"
-      - "traefik.http.services.nats.loadbalancer.server.port=3000"
+      - "traefik.http.services.nats.loadbalancer.server.port=8222"
       - "com.centurylinklabs.watchtower.enable=false"
 
   postgres:

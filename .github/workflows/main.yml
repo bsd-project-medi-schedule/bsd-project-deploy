@@ -24,6 +24,6 @@ jobs:
             cd ${{ vars.WORKING_DIR }}
 
             git stash
-            git pull --rebase origin main
+            git pull
             
             docker compose up -d

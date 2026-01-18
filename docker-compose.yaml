@@ -82,6 +82,8 @@ services:
   email_api:
     image: byckilie/bsd-project-email
     container_name: email-api
+    env_file:
+      - ./.env.email
     volumes:
       - ./tokens:/app/tokens
       - ./client_secret_medi.json:/opt/client_secret.json

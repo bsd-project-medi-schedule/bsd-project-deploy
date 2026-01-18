@@ -31,8 +31,8 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+    # volumes:
+    #   - ./postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
@@ -80,6 +80,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     depends_on:
       - users_db
+      - nats
 
   email_api:
     image: byckilie/bsd-project-email
@@ -91,6 +92,8 @@ services:
       - ./client_secret_medi.json:/opt/client_secret.json
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+    depends_on:
+      - nats
 
   watchtower:
     image: containrrr/watchtower:latest
@@ -106,6 +109,6 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
 
-volumes:
-  postgres_data:
-    driver: local
+# volumes:
+#   postgres_data:
+#     driver: local

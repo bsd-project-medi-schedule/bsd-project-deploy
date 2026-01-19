@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  nats:
+    image: nats:latest
+    container_name: nats-server
+    ports:
+      - "4222:4222"
+      - "8222:8222"   # monitoring
+      - "6222:6222"
+    volumes:
+      - ./nats-server.conf:/etc/nats/nats-server.conf:ro
+    command: >
+      -js
+      -m 8222
+      -c /etc/nats/nats-server.conf
+
+  users_db:
+    image: postgres:17
+    container_name: users-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5400:5432"
+    # volumes:
+    #   - ./postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+
+  appointments_db:
+    image: postgres:17
+    container_name: appointments-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5401:5432"
+    # volumes:
+    #   - ./postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+
+
+  # users_api:
+  #   image: users-api
+  #   container_name: users-api
+  #   ports:
+  #     - "7000:7000"
+  #   env_file:
+  #     - ./.env.users.local
+  #   depends_on:
+  #     - users_db
+  #     - nats
+
+  email_api:
+    image: email-api
+    container_name: email-api
+    env_file:
+      - ./.env.email.local
+    volumes:
+      - ./tokens:/app/tokens
+      - ./client_secret_medi.json:/opt/client_secret.json
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    depends_on:
+      - nats

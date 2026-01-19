@@ -6,5 +6,5 @@ NATS_PORT=4222
 
 AUTH_ENDPOINT=https://users.bychilie.com/auth
 
-DB_URL=jdbc:postgresql://users_db:5432/postgres
+DB_URL=jdbc:postgresql://sch_db:5432/postgres
 

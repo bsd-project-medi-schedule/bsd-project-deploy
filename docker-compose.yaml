@@ -78,6 +78,20 @@ services:
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
       - "com.centurylinklabs.watchtower.enable=false"
 
+  client:
+    image: byckilie/bsd-project-client
+    container_name: bsd-client
+    env_file:
+      - ./.env.users
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`bychilie.com`)"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls=true"
+      - "traefik.http.routers.client.tls.certresolver=myresolver"
+      - "traefik.http.services.client.loadbalancer.server.port=80"
+      - "com.centurylinklabs.watchtower.enable=true"
+
   users_api:
     image: byckilie/bsd-project-users
     container_name: users-api

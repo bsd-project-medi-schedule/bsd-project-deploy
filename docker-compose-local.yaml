@@ -29,9 +29,9 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
 
-  appointments_db:
+  sch_db:
     image: postgres:17
-    container_name: appointments-db
+    container_name: sch-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -43,9 +43,8 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
 
-
   # users_api:
-  #   image: users-api
+  #   image: byckilie/bsd-project-users
   #   container_name: users-api
   #   ports:
   #     - "7000:7000"
@@ -55,8 +54,19 @@ services:
   #     - users_db
   #     - nats
 
+  sch_api:
+    image: byckilie/bsd-project-sch
+    container_name: sch-api
+    ports:
+      - "7001:7000"
+    env_file:
+      - ./.env.sch.local
+    depends_on:
+      - users_db
+      - nats
+
   email_api:
-    image: email-api
+    image: byckilie/bsd-project-email
     container_name: email-api
     env_file:
       - ./.env.email.local
